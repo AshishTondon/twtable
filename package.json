@@ -1,0 +1,25 @@
+{
+  "name": "@twister~/twtable",
+  "version": "0.0.1",
+  "description": "React Js Table UI",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AshishTondon/twtable.git"
+  },
+  "keywords": [
+    "Datatable",
+    "Table",
+    "TableUI"
+  ],
+  "author": "Ashish Tondon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AshishTondon/twtable/issues"
+  },
+  "homepage": "https://github.com/AshishTondon/twtable#readme"
+}
