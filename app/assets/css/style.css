@@ -1,0 +1,12 @@
+.tablefooter{
+    padding: 0.5em;
+    text-align: center;
+}
+
+input[type=text], input[type=password]{
+    padding:0;
+}
+
+.download-file{
+    text-align: right;
+}

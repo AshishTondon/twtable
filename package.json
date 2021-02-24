@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && git add . && git commit -m",
     "postbuild": "git pull && git push",
-    "dev": "ts-node ./app/index.ts"
+    "dev": "ts-node ./app/index.ts",
+    "tsc": "tsc && yarn copy-files",
+    "copy-files": "cp -R ./app/assets/ ./dist/"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,8 @@
     "@types/node": "^12.19.12",
     "typescript": "^4.1.3",
     "ts-node": "^9.0.0",
-    "ts-node-dev": "^1.0.0"
+    "ts-node-dev": "^1.0.0",
+    "react": "^17.0.1",
+    "@types/react": "^16.14.2"
   }
 }
