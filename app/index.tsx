@@ -36,12 +36,23 @@ class TWTable extends React.Component<IN_config, any>{
             startRow:0,
             pages:1,
             currentpage:0,
+            tableHeading:this.props.heading || "",
             defaultstyle: this.props.hasOwnProperty("defaultstyle")?this.props.defaultstyle:true
-        }
+        };
+
+        this.changePageSize = this.changePageSize.bind(this);
     }
 
     componentDidMount() {
         this.refeshpagecount();
+    }
+
+    async changePageSize(pageSize:number) {
+        await this.setState({pageSize});
+        console.log("this.state", this.state);
+        await this.refeshpagecount();
+
+        this.refreshGrid();
     }
 
     refeshpagecount = () => {
@@ -91,7 +102,7 @@ class TWTable extends React.Component<IN_config, any>{
 
     filterClientSideData = (filter:string,event:any) => {
         let userfilters = this.state.userfilters;
-        userfilters[filter] = (typeof event.target.value === "string")?event.target.value:event.target.value.toLowerCase();
+        userfilters[filter] = (typeof event.target.value === "string")?event.target.value.toLowerCase():event.target.value;
 
         this.setState({userfilters});
 
@@ -136,7 +147,8 @@ class TWTable extends React.Component<IN_config, any>{
                 }
                 
                 <Container pagination={this.state.pagination} createPagelist={this.createPagelist} 
-                            headers={this.state.headers} filteredData={this.state.filteredData}>
+                            headers={this.state.headers} filteredData={this.state.filteredData}
+                            changePageSize={this.changePageSize} tableHeading={this.state.tableHeading}>
                     <table className={this.state.tableClass}>
                         <thead>
                             <tr>
@@ -152,7 +164,7 @@ class TWTable extends React.Component<IN_config, any>{
                         </thead>
                         <tbody>
 
-                            <Filter filter={this.state.filter} headers={this.state.headers} filterClientSideData={this.filterClientSideData}/>
+                            <Filter filter={this.state.filter} headers={this.state.headers} filterClientSideData={this.filterClientSideData} />
 
                             <TWTableDataRow filteredData={this.state.filteredData} 
                                             headers={this.state.headers} 

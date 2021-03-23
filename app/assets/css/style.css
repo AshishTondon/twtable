@@ -8,5 +8,14 @@ input[type=text], input[type=password]{
 }
 
 .download-file{
-    text-align: right;
+    float: right;
+}
+
+.download-file button{
+    font-size: 2em;
+}
+
+.page-length{
+    padding: 10px;
+    margin: 7px;
 }

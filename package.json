@@ -1,5 +1,5 @@
 {
-  "name": "@twister~/twtable",
+  "name": "@twister19/twtable",
   "version": "0.0.1",
   "description": "React Js Table UI",
   "main": "dist/index.js",
@@ -11,6 +11,9 @@
     "dev": "ts-node ./app/index.ts",
     "tsc": "tsc && yarn copy-files",
     "copy-files": "cp -R ./app/assets/ ./dist/"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
