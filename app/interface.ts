@@ -14,7 +14,8 @@ export interface IN_config{
     tableClass?: string,
     serversidePagination?: boolean,
     defaultstyle?: boolean,
-    heading?: string
+    heading?: string,
+    pageoption: number[]
 }
 
 export interface IN_TWTableDataRow{

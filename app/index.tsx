@@ -28,6 +28,7 @@ class TWTable extends React.Component<IN_config, any>{
             filter: this.props.filter || false,
             pageSize: this.props.pageSize || 10,
             data: this.props.data,
+            pageoption: this.props.pageoption || [5,10,15,20,25],
             filteredData: this.props.data,
             tableClass: this.props.tableClass || "table table-striped",
             serversidePagination: this.props.serversidePagination || false,
@@ -148,7 +149,8 @@ class TWTable extends React.Component<IN_config, any>{
                 
                 <Container pagination={this.state.pagination} createPagelist={this.createPagelist} 
                             headers={this.state.headers} filteredData={this.state.filteredData}
-                            changePageSize={this.changePageSize} tableHeading={this.state.tableHeading}>
+                            changePageSize={this.changePageSize} tableHeading={this.state.tableHeading}
+                            pageoption={this.state.pageoption}>
                     <table className={this.state.tableClass}>
                         <thead>
                             <tr>

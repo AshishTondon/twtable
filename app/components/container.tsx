@@ -2,8 +2,8 @@ import React from "react";
 import Paging from "./page";
 import Excel from "../downloadable/excel";
 
-const Container = ({pagination, createPagelist, headers, filteredData, children, changePageSize, tableHeading}:any) =>{
-    
+const Container = ({pagination, createPagelist, headers, filteredData, children, changePageSize, tableHeading, pageoption}:any) =>{
+    console.log("pageoption",pageoption);
     return(
         <div className="table-container">
             <div className="table-header">
@@ -23,13 +23,18 @@ const Container = ({pagination, createPagelist, headers, filteredData, children,
                 </div>
                 <div className="col-xs-3">
                     <select name="page-length" className="page-length from-select" onChange={(event) => changePageSize(event.target.value)}>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
+                        {pageoption.map(
+                                (option:number, dataIndex:number) => (<option value={option} key={dataIndex}>{option}</option>)
+                            )
+                        // <option value="2">2</option>
+                        // <option value="3">3</option>
+                        // <option value="5">5</option>
+                        // <option value="10">10</option>
+                        // <option value="15">15</option>
+                        // <option value="25">25</option>
+                        // <option value="50">50</option>
+                        }
+                        
                     </select>
                 </div>
             </div>
