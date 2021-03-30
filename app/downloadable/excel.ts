@@ -19,7 +19,7 @@ const Excel = (event:any, headers:IN_headers[], filteredData:any[]) =>{
     table += `<tr>`;
 
     headers.forEach((header) => {
-        table += `<td>${header.display}</td>`
+        table += `<td>${header.displayname}</td>`
     });
     
     table += `</tr>`;
