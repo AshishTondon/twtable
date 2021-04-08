@@ -3,7 +3,7 @@ import Paging from "./page";
 import Excel from "../downloadable/excel";
 
 const Container = ({pagination, createPagelist, headers, filteredData, children, changePageSize, tableHeading, pageoption}:any) =>{
-    console.log("pageoption",pageoption);
+    
     return(
         <div className="table-container">
             <div className="table-header">

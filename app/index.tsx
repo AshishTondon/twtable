@@ -29,16 +29,19 @@ class TWTable extends React.Component<IN_config, any>{
             pageSize: this.props.pageSize || 10,
             data: this.props.data,
             pageoption: this.props.pageoption || [5,10,15,20,25],
-            filteredData: this.props.data,
             tableClass: this.props.tableClass || "table table-striped",
             serversidePagination: this.props.serversidePagination || false,
+            filteredData: (this.props.hasOwnProperty("serversidePagination") && this.props.serversidePagination)? [] : this.props.data,
             headers: this.props.headers,
             userfilters:{},
             startRow:0,
             pages:1,
             currentpage:0,
             tableHeading:this.props.heading || "",
-            defaultstyle: this.props.hasOwnProperty("defaultstyle")?this.props.defaultstyle:true
+            defaultstyle: this.props.hasOwnProperty("defaultstyle")?this.props.defaultstyle:true,
+            arrangement:{},
+            recordCount: 0,
+            keyStrokeCount: 0 //For Serverside filters
         };
 
         this.changePageSize = this.changePageSize.bind(this);
@@ -48,18 +51,61 @@ class TWTable extends React.Component<IN_config, any>{
         this.refeshpagecount();
     }
 
+    sleep = (milliseconds:number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+
+    async loadServerSideData(issleep:boolean=false){
+        console.log("keyStrokeCount",this.state.keyStrokeCount);
+        
+        // TODO
+        // if(issleep){
+        //     if(this.state.keyStrokeCount > 1){
+        //         await this.setState({keyStrokeCount: this.state.keyStrokeCount - 1});
+    
+        //         return null;
+        //     }
+
+        //     this.sleep(2000);
+        // }
+
+        const twtrequest = {
+            pageSize: this.state.pageSize,
+            currentpage: this.state.currentpage,
+            userfilters: this.state.userfilters,
+            arrangement: this.state.arrangement
+        };
+                    
+        const filteredData = await this.state.data(twtrequest);
+
+        await this.setState({filteredData: filteredData.data});
+        await this.setState({recordCount: filteredData.recordCount});
+        
+    }
+
     async changePageSize(pageSize:number) {
         await this.setState({pageSize});
-        console.log("this.state", this.state);
+
         await this.refeshpagecount();
 
         this.refreshGrid();
     }
 
-    refeshpagecount = () => {
+    refeshpagecount = async() => {
         let pages = 1;
 
-        pages = (this.state.filteredData.length < this.state.pageSize)?pages:Math.ceil(this.state.filteredData.length/this.state.pageSize);
+        // Check for Server side Pagination
+        if(this.state.serversidePagination){
+            await this.loadServerSideData();
+        }else{
+            await this.setState({recordCount: this.state.filteredData.length});
+        }
+
+        const {recordCount, pageSize} = this.state;
+        console.log("recordCount",recordCount);
+        console.log("pageSize",pageSize);
+        // pages = (this.state.filteredData.length < this.state.pageSize)?pages:Math.ceil(this.state.filteredData.length/this.state.pageSize);
+        pages = (recordCount < pageSize)?pages:Math.ceil(recordCount/pageSize);
 
         this.setState({pages});
     }
@@ -85,20 +131,48 @@ class TWTable extends React.Component<IN_config, any>{
         return(buttonlist);
     }
 
-    rearrangerow = (event:any) => {
+    rearrangerow = async (event:any) => {
         let filteredData = [...this.state.filteredData];
         let column = event.target.getAttribute("column");
         let order = event.target.getAttribute("order");
+        let arrangement = {column, order};
+        let recordCount = 0;
+        await this.setState({arrangement});
 
-        if(order === "asc"){
-            filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0));
-            event.target.setAttribute("order", "desc");
+        if(this.state.serversidePagination){
+            if(order === "asc"){
+                event.target.setAttribute("order", "desc");
+            }else{
+                event.target.setAttribute("order", "asc");
+            }
+
+            this.loadServerSideData();
         }else{
-            filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? -1 : ((b[column] > a[column]) ? 1 : 0));
-            event.target.setAttribute("order", "asc");
+            //Client Side Pagination Rearrangement
+            if(order === "asc"){
+                filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0));
+                event.target.setAttribute("order", "desc");
+            }else{
+                filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? -1 : ((b[column] > a[column]) ? 1 : 0));
+                event.target.setAttribute("order", "asc");
+            }
+
+            recordCount = filteredData.length;
+
+            this.setState({recordCount});
+            this.setState({filteredData});
         }
         
-        this.setState({filteredData});
+    }
+
+    filterServerSideData = async (filter:string,event:any) => {
+        let userfilters = this.state.userfilters;
+        userfilters[filter] = (typeof event.target.value === "string")?event.target.value.toLowerCase():event.target.value;
+
+        await this.setState({keyStrokeCount:this.state.keyStrokeCount + 1 });
+        await this.setState({userfilters});
+        
+        this.loadServerSideData(true);
     }
 
     filterClientSideData = (filter:string,event:any) => {
@@ -110,6 +184,7 @@ class TWTable extends React.Component<IN_config, any>{
         this.refreshGrid();
     }
 
+    // Client Side Function Only
     refreshGrid = async () => {
         let filteredData:any = [];
         let isDisplay = false;
@@ -166,7 +241,9 @@ class TWTable extends React.Component<IN_config, any>{
                         </thead>
                         <tbody>
 
-                            <Filter filter={this.state.filter} headers={this.state.headers} filterClientSideData={this.filterClientSideData} />
+                            <Filter filter={this.state.filter} headers={this.state.headers} f
+                                    filterData={(this.state.serversidePagination)?this.filterServerSideData:this.filterClientSideData} 
+                                    sleep={this.sleep} serversidePagination={this.state.serversidePagination}/>
 
                             <TWTableDataRow filteredData={this.state.filteredData} 
                                             headers={this.state.headers} 

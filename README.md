@@ -188,4 +188,12 @@ Convert html table to twtable
 TO DO
 </td>
 </tr>
+<tr>
+<td>
+user defined field for sleep time before sending out request to server on keystroke in server side pagination. Functionlity will contol request to be sent to server after each keystroke. 
+</td>
+<td>
+TO DO
+</td>
+</tr>
 </table>
