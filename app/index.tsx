@@ -1,10 +1,8 @@
 import React from "react";
-import TWTableDataRow from "./components/rows";
 import { IN_config } from "./interface"; 
-import Container from "./components/container";
-import Filter from "./components/filter";
+import Table from "./display/table";
+import Error from "./display/error"; 
 
-import "./assets/mdi/css/materialdesignicons.min.css";
 import "./assets/css/style.css";
 
 declare module 'react' {
@@ -29,44 +27,123 @@ class TWTable extends React.Component<IN_config, any>{
             pageSize: this.props.pageSize || 10,
             data: this.props.data,
             pageoption: this.props.pageoption || [5,10,15,20,25],
-            filteredData: this.props.data,
             tableClass: this.props.tableClass || "table table-striped",
             serversidePagination: this.props.serversidePagination || false,
+            filteredData: (this.props.hasOwnProperty("serversidePagination") && this.props.serversidePagination)? [] : this.props.data,
             headers: this.props.headers,
             userfilters:{},
             startRow:0,
             pages:1,
             currentpage:0,
             tableHeading:this.props.heading || "",
-            defaultstyle: this.props.hasOwnProperty("defaultstyle")?this.props.defaultstyle:true
+            defaultstyle: this.props.hasOwnProperty("defaultstyle")?this.props.defaultstyle:true,
+            arrangement:{},
+            recordCount: 0,
+            keyStrokeCount: 0, //For Serverside filters
+            isError : false,
+            errorMessage: ""
         };
 
         this.changePageSize = this.changePageSize.bind(this);
+    }
+
+    async componentWillMount() {
+        await this.validateProprty();
     }
 
     componentDidMount() {
         this.refeshpagecount();
     }
 
-    async changePageSize(pageSize:number) {
-        await this.setState({pageSize});
-        console.log("this.state", this.state);
-        await this.refeshpagecount();
+    isFunction = (functionToCheck:any) => {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+       }
 
-        this.refreshGrid();
+    validateProprty = () => {
+        const { serversidePagination, data } = this.state;
+        let isError = false;
+        let errorMessage = "";
+        
+        if(serversidePagination && typeof data != "function"){
+            isError = true;
+            errorMessage = "With server side pagination 'data' attribute should be of type Function.";
+        }else if(!serversidePagination && !Array.isArray(data)){
+            isError = true;
+            errorMessage = "With client side pagination 'data' attribute should be of type array of object.";
+        }
+
+        this.setState({ isError });
+        this.setState({ errorMessage });
     }
 
-    refeshpagecount = () => {
+    sleep = (milliseconds:number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+
+    async loadServerSideData(issleep:boolean=false){
+        
+        // TODO
+        // if(issleep){
+        //     if(this.state.keyStrokeCount > 1){
+        //         await this.setState({keyStrokeCount: this.state.keyStrokeCount - 1});
+    
+        //         return null;
+        //     }
+
+        //     this.sleep(2000);
+        // }
+
+        const twtrequest = {
+            pageSize: Number(this.state.pageSize),
+            currentpage: Number(this.state.currentpage),
+            userfilters: this.state.userfilters,
+            arrangement: this.state.arrangement
+        };
+                    
+        const filteredData = await this.state.data(twtrequest);
+
+        await this.setState({filteredData: filteredData.data});
+        await this.setState({recordCount: filteredData.recordCount});
+        
+    }
+
+    async changePageSize(pageSize:number) {
+        await this.setState({pageSize});
+
+        await this.refeshpagecount();
+
+        if(this.state.serversidePagination){
+            this.loadServerSideData();
+        }else{
+            this.refreshGrid();
+        }
+        
+    }
+
+    refeshpagecount = async() => {
         let pages = 1;
 
-        pages = (this.state.filteredData.length < this.state.pageSize)?pages:Math.ceil(this.state.filteredData.length/this.state.pageSize);
+        // Check for Server side Pagination
+        if(this.state.serversidePagination && !this.state.isError){
+            await this.loadServerSideData();
+        }else{
+            await this.setState({recordCount: this.state.filteredData.length});
+        }
+
+        const {recordCount, pageSize} = this.state;
+
+        pages = (recordCount < pageSize)?pages:Math.ceil(recordCount/pageSize);
 
         this.setState({pages});
     }
 
-    changePage = (startPage:number, currentpage:number) => {
+    changePage = async (startPage:number, currentpage:number) => {
         this.setState({startRow: startPage});
-        this.setState({currentpage});
+        await this.setState({currentpage});
+
+        if(this.state.serversidePagination){
+            await this.loadServerSideData();
+        }
     }
 
     createPagelist = () => {
@@ -85,20 +162,48 @@ class TWTable extends React.Component<IN_config, any>{
         return(buttonlist);
     }
 
-    rearrangerow = (event:any) => {
+    rearrangerow = async (event:any) => {
         let filteredData = [...this.state.filteredData];
         let column = event.target.getAttribute("column");
         let order = event.target.getAttribute("order");
+        let arrangement = {column, order};
+        let recordCount = 0;
+        await this.setState({arrangement});
 
-        if(order === "asc"){
-            filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0));
-            event.target.setAttribute("order", "desc");
+        if(this.state.serversidePagination){
+            if(order === "asc"){
+                event.target.setAttribute("order", "desc");
+            }else{
+                event.target.setAttribute("order", "asc");
+            }
+
+            this.loadServerSideData();
         }else{
-            filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? -1 : ((b[column] > a[column]) ? 1 : 0));
-            event.target.setAttribute("order", "asc");
+            //Client Side Pagination Rearrangement
+            if(order === "asc"){
+                filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0));
+                event.target.setAttribute("order", "desc");
+            }else{
+                filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? -1 : ((b[column] > a[column]) ? 1 : 0));
+                event.target.setAttribute("order", "asc");
+            }
+
+            recordCount = filteredData.length;
+
+            this.setState({recordCount});
+            this.setState({filteredData});
         }
         
-        this.setState({filteredData});
+    }
+
+    filterServerSideData = async (filter:string,event:any) => {
+        let userfilters = this.state.userfilters;
+        userfilters[filter] = (typeof event.target.value === "string")?event.target.value.toLowerCase():event.target.value;
+
+        await this.setState({keyStrokeCount:this.state.keyStrokeCount + 1 });
+        await this.setState({userfilters});
+        
+        this.loadServerSideData(true);
     }
 
     filterClientSideData = (filter:string,event:any) => {
@@ -110,6 +215,7 @@ class TWTable extends React.Component<IN_config, any>{
         this.refreshGrid();
     }
 
+    // Client Side Function Only
     refreshGrid = async () => {
         let filteredData:any = [];
         let isDisplay = false;
@@ -141,41 +247,26 @@ class TWTable extends React.Component<IN_config, any>{
 
     render(){
 
+        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, 
+                tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError } = this.state;
         return(
             <React.Fragment>
-                {this.state.defaultstyle && 
-                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
+
+                {defaultstyle && 
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+                        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
                 }
                 
-                <Container pagination={this.state.pagination} createPagelist={this.createPagelist} 
-                            headers={this.state.headers} filteredData={this.state.filteredData}
-                            changePageSize={this.changePageSize} tableHeading={this.state.tableHeading}
-                            pageoption={this.state.pageoption}>
-                    <table className={this.state.tableClass}>
-                        <thead>
-                            <tr>
-                                {this.state.headers.map((header:any, index:number) => (
-                                    header.display &&
-                                    <th key={index} column={ (typeof header.column === "string")?header.column:"" } 
-                                        onClick={(event:any) => this.rearrangerow(event)} order="asc">
-                                        {header.hasOwnProperty('displayname')?header.displayname:""}
-                                        <a><i className="mdi mdi-unfold-more menu-icon"></i></a>
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <Filter filter={this.state.filter} headers={this.state.headers} filterClientSideData={this.filterClientSideData} />
-
-                            <TWTableDataRow filteredData={this.state.filteredData} 
-                                            headers={this.state.headers} 
-                                            startRow={this.state.startRow}
-                                            pageSize={this.state.pageSize}
-                                            pagination={this.state.pagination} />
-                        </tbody>
-                    </table>
-                </Container>
+                { isError ?
+                    <Error errorMessage={errorMessage} />  :
+                    <Table pagination={pagination} createPagelist={this.createPagelist} headers={headers} 
+                            filteredData={filteredData} changePageSize={this.changePageSize} tableHeading={tableHeading} 
+                            pageoption={pageoption} tableClass={tableClass} rearrangerow={this.rearrangerow}
+                            filter={filter} serversidePagination={serversidePagination} filterServerSideData={this.filterServerSideData}
+                            filterClientSideData={this.filterClientSideData} sleep={this.sleep} startRow={startRow} pageSize={pageSize} />
+                }
+                  
+                
             </React.Fragment>
             
         );
