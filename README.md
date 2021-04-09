@@ -62,7 +62,7 @@ const headers = [{column: "name",displayname: "Name", display: true},
 </tr>
 <tr>
 <td>displayname</td>
-<td>flase</td>
+<td>false</td>
 <td>Disply header of the column</td>
 </tr>
 <tr>
@@ -114,37 +114,37 @@ const data = [{name:"Ashish", job:"SoftWare Engineer", department:"MB", team:3, 
 </tr>
 <tr>
 <td>pagination</td>
-<td>flase</td>
+<td>false</td>
 <td>Boolean, defualt value false. True for adding pagination in table</td>
 </tr>
 <tr>
 <td>filter</td>
-<td>flase</td>
+<td>false</td>
 <td>Boolean, defualt value false. True for adding serach box in table.</td>
 </tr>
 <tr>
 <td>tableClass</td>
-<td>flase</td>
+<td>false</td>
 <td>String, Can add custom CSS to table using classes</td>
 </tr>
 <tr>
 <td>serversidePagination</td>
-<td>flase</td>
+<td>false</td>
 <td>Boolean, if true table will fetch data from API</td>
 </tr>
 <tr>
 <td>defaultstyle</td>
-<td>flase</td>
-<td>Boolean, Default value true. If flase twtable will include default css</td>
+<td>false</td>
+<td>Boolean, Default value true. If false twtable will include default css</td>
 </tr>
 <tr>
 <td>heading</td>
-<td>flase</td>
+<td>false</td>
 <td>String, Table heading</td>
 </tr>
 <tr>
 <td>pageoption</td>
-<td>flase</td>
+<td>false</td>
 <td>Array, array of number</td>
 </tr>
 </table>
@@ -154,6 +154,38 @@ const data = [{name:"Ashish", job:"SoftWare Engineer", department:"MB", team:3, 
 <br/>
 <br/>
 
+## Server Side Pagination
+
+### Twtable tag
+```javascript
+<TWTable headers={headers} data={getdata} filter={true} pagination={true} pageSize={4} heading="Demo Table" serversidePagination={true}/>
+```
+
+'data' is of time function
+
+```javascript
+    const getdata = async(twtrequest) =>{
+
+    var data = await axios.post("http://yourwebsite.com/api/employee/info",twtrequest);
+
+    var res = {
+      data: data.data.empdata, // Data type Array
+      recordCount: 40   // Total record count
+    }
+
+    return(res);
+  }
+```
+'twtrequest' Strucure
+```json
+{
+    "pageSize": 10, 
+    "currentpage": 1,  // For fist page currentpage will be 0
+    "userfilters": {"name":"Ashish", "designation":"developer"},
+    "arrangement": {"column":"name", "order":"asc"}
+}
+    
+```
 ## To Do List
 <table border=1 width=100%>
 <tr>

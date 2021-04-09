@@ -2,6 +2,7 @@ import React from "react";
 import Container from "../components/container";
 import Filter from "../components/filter";
 import TWTableDataRow from "../components/rows";
+import TWTableServerDataRow from "../components/severrows";
 
 const Table = ({pagination, createPagelist, headers, filteredData, changePageSize, tableHeading, 
                 pageoption, tableClass, rearrangerow, filter, serversidePagination, filterServerSideData,
@@ -27,15 +28,25 @@ const Table = ({pagination, createPagelist, headers, filteredData, changePageSiz
                 </thead>
                 <tbody>
 
-                    <Filter filter={filter} headers={headers} f
+                    <Filter filter={filter} headers={headers} 
                             filterData={(serversidePagination)?filterServerSideData:filterClientSideData} 
                             sleep={sleep} serversidePagination={serversidePagination}/>
-
-                    <TWTableDataRow filteredData={filteredData} 
+                    
+                    {
+                        serversidePagination ?
+                        <TWTableServerDataRow filteredData={filteredData} 
                                     headers={headers} 
                                     startRow={startRow}
                                     pageSize={pageSize}
-                                    pagination={pagination} />
+                                    pagination={pagination}/>
+                        :
+                        <TWTableDataRow filteredData={filteredData} 
+                                    headers={headers} 
+                                    startRow={startRow}
+                                    pageSize={pageSize}
+                                    pagination={pagination}/>
+                    }
+                    
                 </tbody>
             </table>
         </Container>

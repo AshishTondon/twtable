@@ -63,8 +63,8 @@ class TWTable extends React.Component<IN_config, any>{
         const { serversidePagination, data } = this.state;
         let isError = false;
         let errorMessage = "";
-
-        if(serversidePagination && !this.isFunction(data)){
+        
+        if(serversidePagination && typeof data != "function"){
             isError = true;
             errorMessage = "With server side pagination 'data' attribute should be of type Function.";
         }else if(!serversidePagination && !Array.isArray(data)){
@@ -94,8 +94,8 @@ class TWTable extends React.Component<IN_config, any>{
         // }
 
         const twtrequest = {
-            pageSize: this.state.pageSize,
-            currentpage: this.state.currentpage,
+            pageSize: Number(this.state.pageSize),
+            currentpage: Number(this.state.currentpage),
             userfilters: this.state.userfilters,
             arrangement: this.state.arrangement
         };
@@ -112,7 +112,12 @@ class TWTable extends React.Component<IN_config, any>{
 
         await this.refeshpagecount();
 
-        this.refreshGrid();
+        if(this.state.serversidePagination){
+            this.loadServerSideData();
+        }else{
+            this.refreshGrid();
+        }
+        
     }
 
     refeshpagecount = async() => {
@@ -132,9 +137,13 @@ class TWTable extends React.Component<IN_config, any>{
         this.setState({pages});
     }
 
-    changePage = (startPage:number, currentpage:number) => {
+    changePage = async (startPage:number, currentpage:number) => {
         this.setState({startRow: startPage});
-        this.setState({currentpage});
+        await this.setState({currentpage});
+
+        if(this.state.serversidePagination){
+            await this.loadServerSideData();
+        }
     }
 
     createPagelist = () => {
