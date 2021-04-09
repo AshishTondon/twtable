@@ -5,12 +5,26 @@ export interface IN_headers{
     displayname?: string
 }
 
+export interface IN_orderby{
+    column: string,
+    order: string
+}
+
+export interface IN_pagination{
+    pageSize: number, 
+    currentpage: number,
+    userfilters: any,
+    arrangement: IN_orderby
+}
+
+type propFunction = (params:IN_pagination) => any[];
+
 export interface IN_config{
     pagination?: boolean,
     filter?: boolean,
     pageSize?: number,
     headers: IN_headers[],
-    data: any[],
+    data: any[] | propFunction,
     tableClass?: string,
     serversidePagination?: boolean,
     defaultstyle?: boolean,
