@@ -1,6 +1,6 @@
 {
   "name": "@twister19/twtable",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "React Js Table UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
