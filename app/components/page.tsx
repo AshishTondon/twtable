@@ -1,12 +1,12 @@
 import React from "react";
 
-const Paging = ({createPagelist}:any) => {
-
+const Paging = ({createPagelist, pages}:any) => {
+    console.log("paging_pages", pages);
     return(
         <div className="tablefooter">
             <div className="btn-group" role="group" aria-label="Basic example">
                 <button type="button" className="btn btn-outline-secondary">Left</button>
-                {createPagelist()}
+                {createPagelist(pages)}
                 <button type="button" className="btn btn-outline-secondary">Right</button>
             </div>
         </div>
