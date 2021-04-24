@@ -29,7 +29,7 @@ import TWTable from "@twister~/twtable";
 <li>
 Adding table view
 
-```javascript
+```html
 <TWTable headers={headers} data={data} filter={true} pagination={true} pageSize={4} heading="Demo Table"/>
 ```
 </li>
@@ -40,12 +40,12 @@ headers and data are only two required attributes. In headers attribute twtable 
 <li>
 
 ```json
-const headers = [{column: "name",displayname: "Name", display: true},
-{column: "job",displayname: "Job", display: true},
-{column: "department",displayname: "Depertment", display: true},
-{column: "team",displayname: "Team Strenth", display: true},
-{column: "empId", display:false},
-{button: true, displayname:"Button1", display:true, column:buttonClicked}];
+const headers = [{"column": "name","displayname": "Name", "display": true},
+{"column": "job","displayname": "Job", "display": true},
+{"column": "department","displayname": "Depertment", "display": true},
+{"column": "team","displayname": "Team Strenth", "display": true},
+{"column": "empId", "display":false},
+{"button": true, "displayname":"Button1", "display":true, "column":buttonClicked}];
 ```
 
 **Headers attributes**
@@ -84,11 +84,11 @@ const headers = [{column: "name",displayname: "Name", display: true},
 <li>
 
 ```json
-const data = [{name:"Ashish", job:"SoftWare Engineer", department:"MB", team:3, empId:1}, 
-{name:"Nishant",job:"Business",department:"Data2C", team:4, empId:2},
-{name:"Mukesh",job:"Banker",department:"Data2C", team:5, empId:3},
-{name:"Shashi",job:"Home Maker",department:"Data2C", team:7, empId:4},
-{name:"Kanika",job:"Business",department:"Data2C", team:9, empId:5}];
+const data = [{"name":"Ashish", "job":"SoftWare Engineer", "department":"MB", "team":3, "empId":1}, 
+{"name":"Nishant","job":"Business","department":"Data2C", "team":4, "empId":2},
+{"name":"Mukesh","job":"Banker","department":"Data2C", "team":5, "empId":3},
+{"name":"Shashi","job":"Home Maker","department":"Data2C", "team":7, "empId":4},
+{"name":"Kanika","job":"Business","department":"Data2C", "team":9, "empId":5}];
 ```
 </li>
 </ul>
@@ -157,11 +157,11 @@ const data = [{name:"Ashish", job:"SoftWare Engineer", department:"MB", team:3, 
 ## Server Side Pagination
 
 ### Twtable tag
-```javascript
+```html
 <TWTable headers={headers} data={getdata} filter={true} pagination={true} pageSize={4} heading="Demo Table" serversidePagination={true}/>
 ```
 
-'data' is of time function
+'data' will be a function
 
 ```javascript
     const getdata = async(twtrequest) =>{

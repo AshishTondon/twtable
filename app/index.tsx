@@ -104,7 +104,12 @@ class TWTable extends React.Component<IN_config, any>{
 
         await this.setState({filteredData: filteredData.data});
         await this.setState({recordCount: filteredData.recordCount});
-        
+
+        let currpage = (this.state.recordCount/this.state.pageSize);
+
+        if(currpage < this.state.currentpage){
+            this.changePage(currpage*this.state.pageSize, (currpage-1 < 0)?0:currpage-1);
+        }
     }
 
     async changePageSize(pageSize:number) {
@@ -146,10 +151,10 @@ class TWTable extends React.Component<IN_config, any>{
         }
     }
 
-    createPagelist = () => {
+    createPagelist = (pages:number) => {
         let buttonlist = [];
-
-        for(let index = 0; index<this.state.pages; index++){
+        console.log("createPagelist_pages",pages);
+        for(let index = 0; index<pages; index++){
             if(this.state.currentpage === index){
                 buttonlist.push(<button type="button" className="btn btn-outline-secondary active" 
                                     onClick={(event) => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
@@ -203,7 +208,7 @@ class TWTable extends React.Component<IN_config, any>{
         await this.setState({keyStrokeCount:this.state.keyStrokeCount + 1 });
         await this.setState({userfilters});
         
-        this.loadServerSideData(true);
+        this.refeshpagecount();
     }
 
     filterClientSideData = (filter:string,event:any) => {
@@ -247,7 +252,7 @@ class TWTable extends React.Component<IN_config, any>{
 
     render(){
 
-        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, 
+        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, pages,
                 tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError } = this.state;
         return(
             <React.Fragment>
@@ -261,7 +266,7 @@ class TWTable extends React.Component<IN_config, any>{
                     <Error errorMessage={errorMessage} />  :
                     <Table pagination={pagination} createPagelist={this.createPagelist} headers={headers} 
                             filteredData={filteredData} changePageSize={this.changePageSize} tableHeading={tableHeading} 
-                            pageoption={pageoption} tableClass={tableClass} rearrangerow={this.rearrangerow}
+                            pageoption={pageoption} tableClass={tableClass} rearrangerow={this.rearrangerow} pages={pages}
                             filter={filter} serversidePagination={serversidePagination} filterServerSideData={this.filterServerSideData}
                             filterClientSideData={this.filterClientSideData} sleep={this.sleep} startRow={startRow} pageSize={pageSize} />
                 }
