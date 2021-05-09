@@ -2,7 +2,7 @@ import React from "react";
 import Paging from "./page";
 import Excel from "../downloadable/excel";
 
-const Container = ({pagination, createPagelist, headers, filteredData, children, changePageSize, tableHeading, pageoption}:any) =>{
+const Container = ({pagination, createPagelist, headers, filteredData, children, changePageSize, tableHeading, pageoption, pages}:any) =>{
     
     return(
         <div className="table-container">
@@ -34,7 +34,7 @@ const Container = ({pagination, createPagelist, headers, filteredData, children,
 
             {children}
 
-            {pagination && <Paging createPagelist={createPagelist}/>}
+            {pagination && <Paging createPagelist={createPagelist} pages={pages}/>}
         </div>
     );
 }
