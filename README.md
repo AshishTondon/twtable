@@ -23,7 +23,7 @@ support custom styling
 Import twttable in project repository
 
 ```javascript
-import TWTable from "@twister~/twtable";
+import TWTable from "@twister19/twtable";
 ```
 </li>
 <li>
