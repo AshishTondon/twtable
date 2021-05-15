@@ -153,7 +153,7 @@ class TWTable extends React.Component<IN_config, any>{
 
     createPagelist = (pages:number) => {
         let buttonlist = [];
-        console.log("createPagelist_pages",pages);
+        
         for(let index = 0; index<pages; index++){
             if(this.state.currentpage === index){
                 buttonlist.push(<button type="button" className="btn btn-outline-secondary active" 
