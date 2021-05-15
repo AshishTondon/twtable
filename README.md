@@ -23,7 +23,7 @@ support custom styling
 Import twttable in project repository
 
 ```javascript
-import TWTable from "@twister~/twtable";
+import TWTable from "@twister19/twtable";
 ```
 </li>
 <li>
@@ -184,8 +184,15 @@ const data = [{"name":"Ashish", "job":"SoftWare Engineer", "department":"MB", "t
     "userfilters": {"name":"Ashish", "designation":"developer"},
     "arrangement": {"column":"name", "order":"asc"}
 }
-    
 ```
+
+## Sever-side pagination example
+Website Link: https://ashishtondon.github.io/twtable-serversidepaging-demo/
+
+Source Code: https://github.com/AshishTondon/twtable-serversidepaging-demo
+
+
+
 ## To Do List
 <table border=1 width=100%>
 <tr>
