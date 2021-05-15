@@ -12,7 +12,7 @@ declare module 'react' {
 
     interface ThHTMLAttributes<T> {
         column?: string;
-        order?:string;
+        order?: string;
     }
 }
 
@@ -57,7 +57,7 @@ class TWTable extends React.Component<IN_config, any>{
 
     isFunction = (functionToCheck:any) => {
         return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-       }
+    }
 
     validateProprty = () => {
         const { serversidePagination, data } = this.state;
@@ -256,7 +256,7 @@ class TWTable extends React.Component<IN_config, any>{
                 tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError } = this.state;
         return(
             <React.Fragment>
-
+                
                 {defaultstyle && 
                     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
                         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
