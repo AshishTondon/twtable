@@ -21,12 +21,18 @@ class TWTable extends React.Component<IN_config, any>{
     constructor(props:IN_config){
         super(props);
 
+        const defReportConfig = {download: true, 
+                                reportfn: "twtable", 
+                                reportOption: ["CSV","EXCEL"]};
+        
+        const defPageoption = [5,10,15,20,25];
+
         this.state = {
             pagination : this.props.pagination || false,
             filter: this.props.filter || false,
             pageSize: this.props.pageSize || 10,
             data: this.props.data,
-            pageoption: this.props.pageoption || [5,10,15,20,25],
+            pageoption: this.props.pageoption || defPageoption,
             tableClass: this.props.tableClass || "table table-striped",
             serversidePagination: this.props.serversidePagination || false,
             filteredData: (this.props.hasOwnProperty("serversidePagination") && this.props.serversidePagination)? [] : this.props.data,
@@ -41,7 +47,8 @@ class TWTable extends React.Component<IN_config, any>{
             recordCount: 0,
             keyStrokeCount: 0, //For Serverside filters
             isError : false,
-            errorMessage: ""
+            errorMessage: "",
+            downloadableConfig: Object.assign(defReportConfig, this.props.downloadableConfig)
         };
 
         this.changePageSize = this.changePageSize.bind(this);
@@ -156,10 +163,10 @@ class TWTable extends React.Component<IN_config, any>{
         
         for(let index = 0; index<pages; index++){
             if(this.state.currentpage === index){
-                buttonlist.push(<button type="button" className="btn btn-outline-secondary active" 
+                buttonlist.push(<button type="button" className="btn btn-outline-secondary active" key={index}
                                     onClick={(event) => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
             }else{
-                buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+                buttonlist.push(<button type="button" className="btn btn-outline-secondary" key={index}
                                     onClick={(event) => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
             }
         }
@@ -252,8 +259,9 @@ class TWTable extends React.Component<IN_config, any>{
 
     render(){
 
-        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, pages,
-                tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError } = this.state;
+        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, pages, userfilters,
+                tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError, downloadableConfig,
+                arrangement, data, recordCount } = this.state;
         return(
             <React.Fragment>
                 
@@ -264,11 +272,13 @@ class TWTable extends React.Component<IN_config, any>{
                 
                 { isError ?
                     <Error errorMessage={errorMessage} />  :
-                    <Table pagination={pagination} createPagelist={this.createPagelist} headers={headers} 
+                    <Table pagination={pagination} createPagelist={this.createPagelist} headers={headers} data={data}
                             filteredData={filteredData} changePageSize={this.changePageSize} tableHeading={tableHeading} 
                             pageoption={pageoption} tableClass={tableClass} rearrangerow={this.rearrangerow} pages={pages}
                             filter={filter} serversidePagination={serversidePagination} filterServerSideData={this.filterServerSideData}
-                            filterClientSideData={this.filterClientSideData} sleep={this.sleep} startRow={startRow} pageSize={pageSize} />
+                            filterClientSideData={this.filterClientSideData} sleep={this.sleep} startRow={startRow} pageSize={pageSize}
+                            downloadableConfig={downloadableConfig} userfilters={userfilters} arrangement={arrangement}
+                            recordCount={recordCount}/>
                 }
                   
                 
