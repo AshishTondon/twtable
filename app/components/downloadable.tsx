@@ -1,69 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import CSV from "../downloadable/csv";
 import Excel from "../downloadable/excel";
 
-class Downloadable extends React.Component<any, any>{
-    constructor(props:any){
-        super(props);
+const Downloadable = ({headers, filteredData, downloadableConfig, arrangement, datafn, progmessage,
+                        userfilters, recordCount, serversidePagination, showbtn, progress, moveProgressBar}:any) => {
+    
+    const twtableDownloadSupport = ["EXCEL","CSV"];
+    
+    const getServerReport = async (event:any, reportType:string) => {
+        moveProgressBar(10, "Intiating Download!!");
 
-        this.state = {
-            ...props,
-            progress:0,
-            progmessage:"Intiating Download!!",
-            showbtn:false,
-            twtableDownloadSupport: ["EXCEL","CSV"]
-        }
-    }
-
-    moveProgressBar = (progress:number, message:string) => {
-        // const id = setInterval(frame, 10);
-
-        // const frame = () => {
-
-        // }
-        if(progress === 1){
-            this.setState({progress, progmessage:message, showbtn:false});
-            
-        }else if(progress === 100){
-            this.setState({progress, progmessage:message, showbtn:true});
-        }
-    };
-
-    getServerReport = async (event:any, reportType:string) => {
         const twtrequest = {
-            pageSize: Number(this.state.recordCount),
+            pageSize: Number(recordCount),
             currentpage: 0,
-            userfilters:this.state.userfilters,
-            arrangement:this.state.arrangement,
+            userfilters,
+            arrangement,
             reportType
         };
 
-        this.moveProgressBar(1, "Fetching Data!!");
+        moveProgressBar(30, "Fetching Data!!");
+        
+        const filteredData = await datafn(twtrequest);
 
-        const filteredData = await this.state.datafn(twtrequest);
-
-        this.moveProgressBar(50, "Preparing Report!!");
+        moveProgressBar(70, "Preparing Report!!");
 
         switch(reportType.toUpperCase()){
             case "EXCEL":
-                await Excel(event, this.state.headers, filteredData.data);
+                Excel(event, headers, filteredData.data);
             break;
             case "CSV":
-                await CSV(event, this.state.headers, filteredData.data);
+                CSV(event, headers, filteredData.data);
             break;
             default:
         }
 
-        this.moveProgressBar(100, "Report download will start any moment!!");
+        moveProgressBar(100, "Report download will start any moment!!");
     };
 
-    render(){
-        const {showbtn, downloadableConfig, twtableDownloadSupport, serversidePagination, headers, filteredData,
-                recordCount, userfilters, arrangement, progress, progmessage} = this.state;
-
-        return(
-            <div className="col-xs-3 download-file btn-group" role="group" aria-label="report" >
-                {showbtn ? downloadableConfig.reportOption.map((option:any, index:number) => (
+    return(
+        <div className="col-xs-3 download-file btn-group" role="group" aria-label="report">
+            {showbtn ? downloadableConfig.reportOption.map((option:any, index:number) => (
                     ((typeof downloadableConfig.reportfn === 'string' || 
                         downloadableConfig.reportfn instanceof String) && 
                         downloadableConfig.reportfn.toLowerCase() === "twtable")?
@@ -71,7 +47,7 @@ class Downloadable extends React.Component<any, any>{
                                (twtableDownloadSupport.indexOf(option.toUpperCase()) >= 0)?
                                 <button type="button" key={index} className="btn btn-outline-secondary downloadBtn" 
                                                     onClick={(event) => 
-                                                        serversidePagination? this.getServerReport(event, option) :
+                                                        serversidePagination? getServerReport(event, option) :
                                                         (option.toUpperCase() === "EXCEL")?
                                                             Excel(event, headers, filteredData):CSV(event, headers, filteredData)}>
                                     {option}
@@ -88,12 +64,10 @@ class Downloadable extends React.Component<any, any>{
                             </button> 
                     
                     
-                )):<div id="myBar" style={{width:`${progress}%`,height:"30px",backgroundColor:"#04AA6D"}}>
-                        {progmessage}
-                    </div>}
-            </div>
-        );
-    }
+                )):<React.Fragment><span style={{width:"100%",position:"absolute",height:"100%",fontWeight:"bold",padding:"4px 0",textAlign:"center"}}>{progmessage}</span>
+                                    <div id="myBar" style={{width:`${progress}%`,height:"30px",backgroundColor:"#04AA6D"}}></div></React.Fragment>}
+        </div>
+    );
 }
 
 export default Downloadable;

@@ -7,15 +7,15 @@ import TWTableServerDataRow from "../components/severrows";
 const Table = ({pagination, createPagelist, headers, filteredData, changePageSize, tableHeading, 
                 pageoption, tableClass, rearrangerow, filter, serversidePagination, filterServerSideData,
                 filterClientSideData, sleep, startRow, pageSize, pages, downloadableConfig, arrangement, 
-                userfilters, data, recordCount}:any) => {
+                userfilters, data, recordCount, showbtn, progress, moveProgressBar, progmessage}:any) => {
 
     return(
         <Container pagination={pagination} createPagelist={createPagelist} arrangement={arrangement}
                     headers={headers} filteredData={filteredData} userfilters={userfilters}
                     changePageSize={changePageSize} tableHeading={tableHeading}
                     pageoption={pageoption} pages={pages} downloadableConfig={downloadableConfig}
-                    data={data} serversidePagination={serversidePagination}
-                    recordCount={recordCount}>
+                    data={data} serversidePagination={serversidePagination} progmessage={progmessage}
+                    recordCount={recordCount} progress={progress} showbtn={showbtn} moveProgressBar={moveProgressBar}>
             <table className={tableClass}>
                 <thead>
                     <tr>

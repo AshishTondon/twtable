@@ -2,10 +2,10 @@ import React from "react";
 import Paging from "./page";
 import Downloadable from "./downloadable";
 const Container = ({ pagination, createPagelist, headers, filteredData, 
-                    children, changePageSize, tableHeading, pageoption, 
-                    pages, downloadableConfig, userfilters, arrangement, 
-                    data, serversidePagination, recordCount }:any) =>{
-    
+                    children, changePageSize, tableHeading, pageoption, progmessage,
+                    pages, downloadableConfig, userfilters, arrangement, progress,
+                    data, serversidePagination, recordCount, showbtn, moveProgressBar }:any) =>{
+
     return(
         <div className="table-container">
             <div className="table-header">
@@ -16,7 +16,8 @@ const Container = ({ pagination, createPagelist, headers, filteredData,
                 {downloadableConfig.download ? 
                     <Downloadable headers={headers} filteredData={filteredData} downloadableConfig={downloadableConfig}
                                     userfilters={userfilters} arrangement={arrangement} recordCount={recordCount} 
-                                    datafn={data} serversidePagination={serversidePagination}/>:
+                                    datafn={data} serversidePagination={serversidePagination} progress={progress}
+                                    showbtn={showbtn} moveProgressBar={moveProgressBar} progmessage={progmessage}/>:
                     <div className="col-xs-3"></div>}
                 
 
