@@ -12,7 +12,7 @@ const Table = ({pagination, createPagelist, headers, filteredData, changePageSiz
     return(
         <Container pagination={pagination} createPagelist={createPagelist} arrangement={arrangement}
                     headers={headers} filteredData={filteredData} userfilters={userfilters}
-                    changePageSize={changePageSize} tableHeading={tableHeading}
+                    changePageSize={changePageSize} tableHeading={tableHeading} pageSize={pageSize}
                     pageoption={pageoption} pages={pages} downloadableConfig={downloadableConfig}
                     data={data} serversidePagination={serversidePagination} progmessage={progmessage}
                     recordCount={recordCount} progress={progress} showbtn={showbtn} moveProgressBar={moveProgressBar}>

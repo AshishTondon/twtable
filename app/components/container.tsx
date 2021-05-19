@@ -1,7 +1,7 @@
 import React from "react";
 import Paging from "./page";
 import Downloadable from "./downloadable";
-const Container = ({ pagination, createPagelist, headers, filteredData, 
+const Container = ({ pagination, createPagelist, headers, filteredData, pageSize,
                     children, changePageSize, tableHeading, pageoption, progmessage,
                     pages, downloadableConfig, userfilters, arrangement, progress,
                     data, serversidePagination, recordCount, showbtn, moveProgressBar }:any) =>{
@@ -22,7 +22,8 @@ const Container = ({ pagination, createPagelist, headers, filteredData,
                 
 
                 <div className="col-xs-3">
-                    <select name="page-length" className="page-length from-select" onChange={(event) => changePageSize(event.target.value)}>
+                    <select name="page-length" className="page-length from-select" defaultValue={pageSize}
+                            onChange={(event) => changePageSize(event.target.value)}>
                         {pageoption.map(
                                 (option:number, dataIndex:number) => (<option value={option} key={dataIndex}>{option}</option>)
                             )

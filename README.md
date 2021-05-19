@@ -4,13 +4,16 @@ Reactjs table module
 ### Why to use twtable module ?
 <ul>
 <li>
-Pagination
+Client-side Pagination
+</li>
+<li>
+Server-side Pagination
 </li>
 <li>
 Search filter
 </li>
 <li>
-Download option excel, csv, pdf
+Download option excel, csv
 </li>
 <li>
 support custom styling
@@ -20,7 +23,7 @@ support custom styling
 ### Steps to configure twtable in project
 <ul>
 <li>
-Import twttable in project repository
+Import twtable in project repository
 
 ```javascript
 import TWTable from "@twister19/twtable";
@@ -101,51 +104,102 @@ const data = [{"name":"Ashish", "job":"SoftWare Engineer", "department":"MB", "t
 <th width="20%">Attribute</th>
 <th width=10%>Require</th>
 <th>Describtion</th>
+<th>Version support</th>
 </tr>
 <tr>
 <td>headers</td>
 <td>true</td>
 <td>Json, As described in above point</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>data</td>
 <td>true</td>
-<td>Json, As described in above point</td>
+<td>Json OR Function, JSON for client-side pagination and Function for Server-side pagination</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>pagination</td>
 <td>false</td>
 <td>Boolean, defualt value false. True for adding pagination in table</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>filter</td>
 <td>false</td>
 <td>Boolean, defualt value false. True for adding serach box in table.</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>tableClass</td>
 <td>false</td>
 <td>String, Can add custom CSS to table using classes</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>serversidePagination</td>
 <td>false</td>
 <td>Boolean, if true table will fetch data from API</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>defaultstyle</td>
 <td>false</td>
 <td>Boolean, Default value true. If false twtable will include default css</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>heading</td>
 <td>false</td>
 <td>String, Table heading</td>
+<td>1.5.4 + </td>
 </tr>
 <tr>
 <td>pageoption</td>
 <td>false</td>
 <td>Array, array of number</td>
+<td>1.5.4 + </td>
+</tr>
+<tr>
+<td>downloadableConfig</td>
+<td>false</td>
+<td>JSON, three optional attributes
+<table border=1 width=100% margin="0">
+<tr>
+<th>
+Attribute
+</td>
+<th>
+Description
+</td>
+</tr>
+<tr>
+<td>
+download
+</td>
+<td>
+Boolean, Default is True. If false, Download option will be off.
+</td>
+</tr>
+<tr>
+<td>
+reportfn
+</td>
+<td>
+String OR Function, Defualt value 'twtable' then twtable will handle download options. If function, the function will be called on download option click. 
+</td>
+</tr>
+<tr>
+<td>
+reportOption
+</td>
+<td>
+Array, Array of type of report you want to have download options. Defulat value is ['csv', 'excel'] (only these two type of report handled by twtable. User can have more options. But with 'reportfn' attribute as function.). 
+</td>
+</tr>
+</table>
+</td>
+<td>1.6.0 + </td>
 </tr>
 </table>
 </li>
