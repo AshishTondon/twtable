@@ -1,33 +1,33 @@
 import React from "react";
 import Paging from "./page";
-import Excel from "../downloadable/excel";
+import Downloadable from "./downloadable";
+const Container = ({ pagination, createPagelist, headers, filteredData, pageSize,
+                    children, changePageSize, tableHeading, pageoption, progmessage,
+                    pages, downloadableConfig, userfilters, arrangement, progress,
+                    data, serversidePagination, recordCount, showbtn, moveProgressBar }:any) =>{
 
-const Container = ({pagination, createPagelist, headers, filteredData, children, changePageSize, tableHeading, pageoption, pages}:any) =>{
-    
     return(
         <div className="table-container">
             <div className="table-header">
                 <div className="col-xs-6">
                     <h2>{tableHeading}</h2>
                 </div>
-                <div className="col-xs-3 download-file btn-group" role="group" aria-label="Basic example">
-                    <button type="button" className="btn btn-outline-secondary downloadBtn" onClick={(event) => Excel(event, headers, filteredData)}>
-                        Excel
-                    </button>
-                    <button type="button" className="btn btn-outline-secondary downloadBtn" onClick={(event) => Excel(event, headers, filteredData)}>
-                        csv
-                    </button>
-                    <button type="button" className="btn btn-outline-secondary downloadBtn" onClick={(event) => Excel(event, headers, filteredData)}>
-                        pdf
-                    </button>
-                </div>
+                
+                {downloadableConfig.download ? 
+                    <Downloadable headers={headers} filteredData={filteredData} downloadableConfig={downloadableConfig}
+                                    userfilters={userfilters} arrangement={arrangement} recordCount={recordCount} 
+                                    datafn={data} serversidePagination={serversidePagination} progress={progress}
+                                    showbtn={showbtn} moveProgressBar={moveProgressBar} progmessage={progmessage}/>:
+                    <div className="col-xs-3"></div>}
+                
+
                 <div className="col-xs-3">
-                    <select name="page-length" className="page-length from-select" onChange={(event) => changePageSize(event.target.value)}>
+                    <select name="page-length" className="page-length from-select" defaultValue={pageSize}
+                            onChange={(event) => changePageSize(event.target.value)}>
                         {pageoption.map(
                                 (option:number, dataIndex:number) => (<option value={option} key={dataIndex}>{option}</option>)
                             )
                         }
-                        
                     </select>
                 </div>
             </div>

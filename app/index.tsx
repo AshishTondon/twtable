@@ -21,12 +21,18 @@ class TWTable extends React.Component<IN_config, any>{
     constructor(props:IN_config){
         super(props);
 
+        const defReportConfig = {download: true, 
+                                reportfn: "twtable", 
+                                reportOption: ["CSV","EXCEL"]};
+        
+        const defPageoption = [5,10,15,20,25];
+
         this.state = {
             pagination : this.props.pagination || false,
             filter: this.props.filter || false,
             pageSize: this.props.pageSize || 10,
             data: this.props.data,
-            pageoption: this.props.pageoption || [5,10,15,20,25],
+            pageoption: this.props.pageoption || defPageoption,
             tableClass: this.props.tableClass || "table table-striped",
             serversidePagination: this.props.serversidePagination || false,
             filteredData: (this.props.hasOwnProperty("serversidePagination") && this.props.serversidePagination)? [] : this.props.data,
@@ -41,10 +47,17 @@ class TWTable extends React.Component<IN_config, any>{
             recordCount: 0,
             keyStrokeCount: 0, //For Serverside filters
             isError : false,
-            errorMessage: ""
+            errorMessage: "",
+            downloadableConfig: Object.assign(defReportConfig, this.props.downloadableConfig),
+            showbtn: true,
+            progress: 0,
+            progmessage: "Intiating Download!!",
+            startOffset:0,
+            endOffset:1
         };
 
         this.changePageSize = this.changePageSize.bind(this);
+        this.moveProgressBar = this.moveProgressBar.bind(this);
     }
 
     async componentWillMount() {
@@ -153,16 +166,29 @@ class TWTable extends React.Component<IN_config, any>{
 
     createPagelist = (pages:number) => {
         let buttonlist = [];
+        let {currentpage} = this.state;
+
+        // let navprev = 0;
+        // let navnxt = 0;
         
-        for(let index = 0; index<pages; index++){
-            if(this.state.currentpage === index){
-                buttonlist.push(<button type="button" className="btn btn-outline-secondary active" 
-                                    onClick={(event) => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
+        // navprev = (direction.length>0 && direction === "PREV")? 1 : 0;
+        // navnxt = (direction.length>0 && direction === "NEXT")? 1 : 0;
+
+
+        const startOffset = (currentpage-2 < 0)?0:currentpage-2;
+        const endOffset = (startOffset + 5 < pages)?startOffset + 5 : pages;
+
+        for(let index=startOffset; index<endOffset; index++){
+            if(currentpage === index){
+                buttonlist.push(<button type="button" className="btn btn-outline-secondary active" key={index}
+                                    onClick={() => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
             }else{
-                buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
-                                    onClick={(event) => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
+                buttonlist.push(<button type="button" className="btn btn-outline-secondary" key={index}
+                                    onClick={() => this.changePage(index*this.state.pageSize, index)}>{index+1}</button>);
             }
         }
+
+        // this.setState({startOffset, endOffset});
 
         return(buttonlist);
     }
@@ -250,10 +276,20 @@ class TWTable extends React.Component<IN_config, any>{
 
     }
 
+    moveProgressBar = (progress:number, message:string) => {
+        if(progress >= 1 && progress < 100){
+            this.setState({progress, progmessage:message, showbtn:false});
+            
+        }else if(progress === 100){
+            this.setState({progress, progmessage:message, showbtn:true});
+        }
+    };
+
     render(){
 
-        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, pages,
-                tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError } = this.state;
+        const { errorMessage,  pagination, headers, filteredData, tableHeading, pageoption, pages, userfilters,
+                tableClass, filter, serversidePagination, startRow, pageSize, defaultstyle, isError, downloadableConfig,
+                arrangement, data, recordCount, showbtn, progress, progmessage } = this.state;
         return(
             <React.Fragment>
                 
@@ -264,11 +300,14 @@ class TWTable extends React.Component<IN_config, any>{
                 
                 { isError ?
                     <Error errorMessage={errorMessage} />  :
-                    <Table pagination={pagination} createPagelist={this.createPagelist} headers={headers} 
+                    <Table pagination={pagination} createPagelist={this.createPagelist} headers={headers} data={data}
                             filteredData={filteredData} changePageSize={this.changePageSize} tableHeading={tableHeading} 
                             pageoption={pageoption} tableClass={tableClass} rearrangerow={this.rearrangerow} pages={pages}
                             filter={filter} serversidePagination={serversidePagination} filterServerSideData={this.filterServerSideData}
-                            filterClientSideData={this.filterClientSideData} sleep={this.sleep} startRow={startRow} pageSize={pageSize} />
+                            filterClientSideData={this.filterClientSideData} sleep={this.sleep} startRow={startRow} pageSize={pageSize}
+                            downloadableConfig={downloadableConfig} userfilters={userfilters} arrangement={arrangement}
+                            recordCount={recordCount} progress={progress} showbtn={showbtn} progmessage={progmessage}
+                            moveProgressBar={this.moveProgressBar}/>
                 }
                   
                 

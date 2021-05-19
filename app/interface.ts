@@ -2,7 +2,8 @@ export interface IN_headers{
     width?: number,
     column?: any,
     display: boolean,
-    displayname?: string
+    displayname?: string,
+    button?:boolean
 }
 
 export interface IN_orderby{
@@ -14,10 +15,18 @@ export interface IN_pagination{
     pageSize: number, 
     currentpage: number,
     userfilters: any,
-    arrangement: IN_orderby
+    arrangement: IN_orderby,
+    reportType?: string
 }
 
 type propFunction = (params:IN_pagination) => any[];
+type propReportFunction = (params:IN_pagination) => boolean;
+
+export interface IN_reportConfig{
+    download?: boolean, 
+    reportfn?: string | propReportFunction,
+    reportOption?: string[]
+}
 
 export interface IN_config{
     pagination?: boolean,
@@ -29,7 +38,8 @@ export interface IN_config{
     serversidePagination?: boolean,
     defaultstyle?: boolean,
     heading?: string,
-    pageoption: number[]
+    pageoption: number[],
+    downloadableConfig?: IN_reportConfig
 }
 
 export interface IN_TWTableDataRow{
