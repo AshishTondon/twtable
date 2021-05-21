@@ -157,7 +157,7 @@ class TWTable extends React.Component<IN_config, any>{
 
     changePage = async (startPage:number, currentpage:number) => {
         this.setState({startRow: startPage});
-        await this.setState({currentpage});
+        await this.setState({currentpage: Math.floor(currentpage)});
 
         if(this.state.serversidePagination){
             await this.loadServerSideData();
@@ -178,6 +178,14 @@ class TWTable extends React.Component<IN_config, any>{
         const startOffset = (currentpage-2 < 0)?0:currentpage-2;
         const endOffset = (startOffset + 5 < pages)?startOffset + 5 : pages;
 
+        if(currentpage > 0){
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+                onClick={() => this.changePage(0,0)}>&#8810;</button>);
+
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+                onClick={() => this.changePage((currentpage-1)*this.state.pageSize, (currentpage-1))}>&lt;</button>);
+        }
+        
         for(let index=startOffset; index<endOffset; index++){
             if(currentpage === index){
                 buttonlist.push(<button type="button" className="btn btn-outline-secondary active" key={index}
@@ -188,6 +196,13 @@ class TWTable extends React.Component<IN_config, any>{
             }
         }
 
+        if(currentpage < (pages-1)){
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+                onClick={() => this.changePage((currentpage+1)*this.state.pageSize, (currentpage+1))}>&gt;</button>);
+
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+                onClick={() => this.changePage((pages-1)*this.state.pageSize, pages-1)}>&#8811;</button>);
+        }
         // this.setState({startOffset, endOffset});
 
         return(buttonlist);
