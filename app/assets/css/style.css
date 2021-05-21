@@ -19,3 +19,7 @@ input[type=text], input[type=password]{
     padding: 10px;
     margin: 7px;
 }
+
+.downloadBtn{
+    font-size: 1em !important;
+}

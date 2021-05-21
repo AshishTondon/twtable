@@ -19,22 +19,24 @@ const Excel = (event:any, headers:IN_headers[], filteredData:any[]) =>{
     table += `<tr>`;
 
     headers.forEach((header) => {
-        table += `<td>${header.displayname}</td>`
+        if(header.display && (!header.hasOwnProperty("button") && !header.button)){
+            table += `<td>${header.displayname}</td>`;
+        }
     });
     
     table += `</tr>`;
     filteredData.forEach((node) => {
             table += `<tr>`;
                 headers.forEach((header) => {
-                    table += `<td>${node[header.column]}</td>`;
+                    if(header.display && (!header.hasOwnProperty("button") && !header.button)){
+                        table += `<td>${node[header.column]}</td>`;
+                    }
                 });
             table += `</tr>`;
         });
 
     table += `</table></body></html>`;
     
-    let data_type = 'data:application/vnd.ms-excel';
-
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE");
     let sa:any = "";

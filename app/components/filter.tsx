@@ -1,6 +1,6 @@
 import React from "react";
 
-const Filter = ({filter, headers, filterClientSideData}:any) => {
+const Filter = ({filter, headers, filterData}:any) => {
 
     return(
         <React.Fragment>
@@ -9,7 +9,7 @@ const Filter = ({filter, headers, filterClientSideData}:any) => {
                     {headers.map((header:any, index:number) => (
                         header.display &&
                         <td key={index}> 
-                            {(typeof header.column != "function") && <input type="text" placeholder={"Seach " + header.display + "..."} name={header.column} key={index} onChange={(event) => filterClientSideData(header.column,event)}/>}
+                            {(typeof header.column != "function") && <input type="text" placeholder={"Seach " + header.display + "..."} name={header.column} key={index} onChange={(event) => filterData(header.column,event)}/>}
                         </td>
                     ))}
                 </tr>
