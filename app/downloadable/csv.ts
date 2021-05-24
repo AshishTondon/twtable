@@ -2,7 +2,7 @@ import React from "react";
 import {IN_headers} from "../interface";
 
 const CSV = (event:any, headers:IN_headers[], filteredData:any[]) => {
-
+    event.persist();
     let table = "";
 
     var header = headers.map((header) => (

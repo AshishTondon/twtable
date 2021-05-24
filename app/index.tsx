@@ -58,6 +58,7 @@ class TWTable extends React.Component<IN_config, any>{
 
         this.changePageSize = this.changePageSize.bind(this);
         this.moveProgressBar = this.moveProgressBar.bind(this);
+        
     }
 
     async componentWillMount() {
@@ -138,8 +139,19 @@ class TWTable extends React.Component<IN_config, any>{
         
     }
 
+    formattheaders = async (column:string|null = null, order:string|null = null) => {
+        const {headers} = this.state;
+
+        const tempheaders = headers.map((header:any) => (header.hasOwnProperty("column") && typeof header.column === "string" && header.column === column)?
+                        order === "asc"?{...header, ordersign:"↓"}:{...header, ordersign:"↑"}
+                        :{...header, ordersign:"↕"});
+
+        await this.setState({headers:tempheaders});
+    }
+
     refeshpagecount = async() => {
         let pages = 1;
+        await this.formattheaders();
 
         // Check for Server side Pagination
         if(this.state.serversidePagination && !this.state.isError){
@@ -151,6 +163,8 @@ class TWTable extends React.Component<IN_config, any>{
         const {recordCount, pageSize} = this.state;
 
         pages = (recordCount < pageSize)?pages:Math.ceil(recordCount/pageSize);
+
+        
 
         this.setState({pages});
     }
@@ -168,21 +182,14 @@ class TWTable extends React.Component<IN_config, any>{
         let buttonlist = [];
         let {currentpage} = this.state;
 
-        // let navprev = 0;
-        // let navnxt = 0;
-        
-        // navprev = (direction.length>0 && direction === "PREV")? 1 : 0;
-        // navnxt = (direction.length>0 && direction === "NEXT")? 1 : 0;
-
-
         const startOffset = (currentpage-2 < 0)?0:currentpage-2;
         const endOffset = (startOffset + 5 < pages)?startOffset + 5 : pages;
 
         if(currentpage > 0){
             buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
-                onClick={() => this.changePage(0,0)}>&#8810;</button>);
+                onClick={() => this.changePage(0,0)} key="expev">&#8810;</button>);
 
-            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" key="pev"
                 onClick={() => this.changePage((currentpage-1)*this.state.pageSize, (currentpage-1))}>&lt;</button>);
         }
         
@@ -197,10 +204,10 @@ class TWTable extends React.Component<IN_config, any>{
         }
 
         if(currentpage < (pages-1)){
-            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" key="next"
                 onClick={() => this.changePage((currentpage+1)*this.state.pageSize, (currentpage+1))}>&gt;</button>);
 
-            buttonlist.push(<button type="button" className="btn btn-outline-secondary" 
+            buttonlist.push(<button type="button" className="btn btn-outline-secondary" key="exnext"
                 onClick={() => this.changePage((pages-1)*this.state.pageSize, pages-1)}>&#8811;</button>);
         }
         // this.setState({startOffset, endOffset});
@@ -209,14 +216,22 @@ class TWTable extends React.Component<IN_config, any>{
     }
 
     rearrangerow = async (event:any) => {
-        let filteredData = [...this.state.filteredData];
+        event.persist();
+
+        let {filteredData, serversidePagination, headers} = this.state;
+
         let column = event.target.getAttribute("column");
         let order = event.target.getAttribute("order");
+
         let arrangement = {column, order};
         let recordCount = 0;
         await this.setState({arrangement});
 
-        if(this.state.serversidePagination){
+        // headers = headers.map((header:any) => (typeof header.column === "string"&& header.column === column)?
+        //                                 (order === "asc")?`${header.displayname} &#8595;`:`${header.displayname} &#8593;`:
+        //                                 header.displayname );
+        
+        if(serversidePagination){
             if(order === "asc"){
                 event.target.setAttribute("order", "desc");
             }else{
@@ -236,15 +251,20 @@ class TWTable extends React.Component<IN_config, any>{
 
             recordCount = filteredData.length;
 
+            // this.setState({headers});
             this.setState({recordCount});
             this.setState({filteredData});
         }
+
+        await this.formattheaders(column, order);
         
     }
 
     filterServerSideData = async (filter:string,event:any) => {
+        const eventValue = event.target.value;
         let userfilters = this.state.userfilters;
-        userfilters[filter] = (typeof event.target.value === "string")?event.target.value.toLowerCase():event.target.value;
+
+        userfilters[filter] = (typeof eventValue === "string")?eventValue.toLowerCase():eventValue;
 
         await this.setState({keyStrokeCount:this.state.keyStrokeCount + 1 });
         await this.setState({userfilters});
@@ -253,8 +273,10 @@ class TWTable extends React.Component<IN_config, any>{
     }
 
     filterClientSideData = (filter:string,event:any) => {
+        const eventValue = event.target.value;
         let userfilters = this.state.userfilters;
-        userfilters[filter] = (typeof event.target.value === "string")?event.target.value.toLowerCase():event.target.value;
+
+        userfilters[filter] = (typeof eventValue === "string")?eventValue.toLowerCase():eventValue;
 
         this.setState({userfilters});
 
