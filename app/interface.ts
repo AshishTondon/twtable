@@ -3,7 +3,8 @@ export interface IN_headers{
     column?: any,
     display: boolean,
     displayname?: string,
-    button?:boolean
+    button?:boolean,
+    ordersign?:String
 }
 
 export interface IN_orderby{
