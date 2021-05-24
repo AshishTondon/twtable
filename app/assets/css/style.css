@@ -23,3 +23,7 @@ input[type=text], input[type=password]{
 .downloadBtn{
     font-size: 1em !important;
 }
+
+.ordersign{
+    margin: 0 5px;
+}

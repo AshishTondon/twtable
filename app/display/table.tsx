@@ -8,7 +8,7 @@ const Table = ({pagination, createPagelist, headers, filteredData, changePageSiz
                 pageoption, tableClass, rearrangerow, filter, serversidePagination, filterServerSideData,
                 filterClientSideData, sleep, startRow, pageSize, pages, downloadableConfig, arrangement, 
                 userfilters, data, recordCount, showbtn, progress, moveProgressBar, progmessage}:any) => {
-
+    
     return(
         <Container pagination={pagination} createPagelist={createPagelist} arrangement={arrangement}
                     headers={headers} filteredData={filteredData} userfilters={userfilters}
@@ -21,10 +21,9 @@ const Table = ({pagination, createPagelist, headers, filteredData, changePageSiz
                     <tr>
                         {headers.map((header:any, index:number) => (
                             header.display &&
-                            <th key={index} column={ (typeof header.column === "string")?header.column:"" } 
+                            <th key={index} id={`twheader-${(typeof header.column === "string")?header.column:index}`} column={ (typeof header.column === "string")?header.column:"" } 
                                 onClick={(event:any) => rearrangerow(event)} order="asc">
-                                {header.hasOwnProperty('displayname')?header.displayname:""}
-                                <a><i className="mdi mdi-unfold-more menu-icon"></i></a>
+                                {header.hasOwnProperty('displayname')?header.displayname:""}<span className="ordersign">{typeof header.column === "string" && header.hasOwnProperty('ordersign')?header.ordersign:""}</span>
                             </th>
                         ))}
                     </tr>

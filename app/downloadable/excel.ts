@@ -4,7 +4,7 @@ import {IN_headers} from "../interface";
 window.navigator.msSaveBlob = () => true;
 
 const Excel = (event:any, headers:IN_headers[], filteredData:any[]) =>{
-
+    event.persist();
     let table = "";
 
     table = `<html xmlns:x="urn:schemas-microsoft-com:office:excel">`;
