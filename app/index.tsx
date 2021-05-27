@@ -215,46 +215,43 @@ class TWTable extends React.Component<IN_config, any>{
         return(buttonlist);
     }
 
-    rearrangerow = async (event:any) => {
-        event.persist();
-
+    rearrangerow = async (event:any, column:string, order:string) => {
+        
         let {filteredData, serversidePagination, headers} = this.state;
 
-        let column = event.target.getAttribute("column");
-        let order = event.target.getAttribute("order");
-
+        console.log("headers", headers)
         let arrangement = {column, order};
         let recordCount = 0;
         await this.setState({arrangement});
 
-        // headers = headers.map((header:any) => (typeof header.column === "string"&& header.column === column)?
-        //                                 (order === "asc")?`${header.displayname} &#8595;`:`${header.displayname} &#8593;`:
-        //                                 header.displayname );
-        
         if(serversidePagination){
             if(order === "asc"){
-                event.target.setAttribute("order", "desc");
+                headers = headers.map((header:any) => ( 
+                    (typeof header.column === "string" &&  header.column === column)?{...header, order:"desc"}:header ));
             }else{
-                event.target.setAttribute("order", "asc");
+                headers = headers.map((header:any) => ( 
+                    (typeof header.column === "string" &&  header.column === column)?{...header, order:"asc"}:header ));
             }
-
+             
             this.loadServerSideData();
         }else{
             //Client Side Pagination Rearrangement
             if(order === "asc"){
                 filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0));
-                event.target.setAttribute("order", "desc");
+                headers = headers.map((header:any) => ( 
+                    (typeof header.column === "string" &&  header.column === column)?{...header, order:"desc"}:header ));
             }else{
                 filteredData.sort((a:any,b:any) => (a[column] > b[column]) ? -1 : ((b[column] > a[column]) ? 1 : 0));
-                event.target.setAttribute("order", "asc");
+                headers = headers.map((header:any) => ( 
+                    (typeof header.column === "string" &&  header.column === column)?{...header, order:"asc"}:header ));
             }
 
             recordCount = filteredData.length;
-
-            // this.setState({headers});
             this.setState({recordCount});
             this.setState({filteredData});
         }
+
+        await this.setState({headers});
 
         await this.formattheaders(column, order);
         
