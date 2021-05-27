@@ -6,12 +6,19 @@ const Container = ({ pagination, createPagelist, headers, filteredData, pageSize
                     children, changePageSize, tableHeading, pageoption, progmessage,
                     pages, downloadableConfig, userfilters, arrangement, progress,
                     data, serversidePagination, recordCount, showbtn, moveProgressBar }:any) =>{
-
+    
     return(
         <div className="table-container">
             <div className="table-header">
                 <div className="col-xs-6">
-                    <h2>{tableHeading}</h2>
+                    <div className="row">
+                        <div className="col-xs-8">
+                            <h2>{tableHeading}</h2>
+                        </div>
+                        <div className="recordCount col-xs-4">
+                            {`Records: ${recordCount.toString().replace(/(.)(?=(\d{3})+$)/g,'$1,')}`}
+                        </div>
+                    </div>
                 </div>
                 
                 {downloadableConfig.download ? 
@@ -23,14 +30,17 @@ const Container = ({ pagination, createPagelist, headers, filteredData, pageSize
                 
 
                 <div className="col-xs-3">
-                    <span className="pagesize-label">Per Page</span>
-                    <select name="page-length" className="page-length from-select" defaultValue={pageSize}
-                            onChange={(event) => changePageSize(event.target.value)}>
-                        {pageoption.map(
-                                (option:number, dataIndex:number) => (<option value={option} key={dataIndex}>{option}</option>)
-                            )
-                        }
-                    </select>
+                    {pagination && 
+                    <div>
+                        <span className="pagesize-label">Per Page</span>
+                        <select name="page-length" className="page-length from-select" defaultValue={pageSize}
+                                onChange={(event) => changePageSize(event.target.value)}>
+                            {pageoption.map(
+                                    (option:number, dataIndex:number) => (<option value={option} key={dataIndex}>{option}</option>)
+                                )
+                            }
+                        </select>
+                    </div>}
                 </div>
             </div>
 
