@@ -19,13 +19,17 @@ const Table = ({pagination, createPagelist, headers, filteredData, changePageSiz
             <table className={tableClass}>
                 <thead>
                     <tr>
-                        {headers.map((header:any, index:number) => (
-                            header.display &&
-                            <th key={index} id={`twheader-${(typeof header.column === "string")?header.column:index}`} column={ (typeof header.column === "string")?header.column:"" } 
-                                onClick={(event:any) => rearrangerow(event)} order="asc">
-                                {header.hasOwnProperty('displayname')?header.displayname:""}<span className="ordersign">{typeof header.column === "string" && header.hasOwnProperty('ordersign')?header.ordersign:""}</span>
-                            </th>
-                        ))}
+                        {headers.map((header:any, index:number) => {
+                            const tempcol = (typeof header.column === "string")?header.column:"";
+                            const temporder = header.hasOwnProperty('order')?header.order:"asc";
+                            return(
+                                header.display &&
+                                <th key={index} id={`twheader-${(typeof header.column === "string")?header.column:index}`} column={tempcol} 
+                                    onClick={(event:any) => rearrangerow(event, tempcol, temporder)} order={temporder}>
+                                    {header.hasOwnProperty('displayname')?header.displayname:""}<span className="ordersign">{typeof header.column === "string" && header.hasOwnProperty('ordersign')?header.ordersign:""}</span>
+                                </th>
+                            )
+                        })}
                     </tr>
                 </thead>
                 <tbody>

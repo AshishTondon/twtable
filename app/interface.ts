@@ -4,7 +4,8 @@ export interface IN_headers{
     display: boolean,
     displayname?: string,
     button?:boolean,
-    ordersign?:String
+    ordersign?:String,
+    order?:string
 }
 
 export interface IN_orderby{
