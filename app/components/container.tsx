@@ -10,12 +10,12 @@ const Container = ({ pagination, createPagelist, headers, filteredData, pageSize
     return(
         <div className="table-container">
             <div className="table-header">
-                <div className="col-xs-6">
+                <div className="col-sm-6">
                     <div className="row">
-                        <div className="col-xs-8">
+                        <div className="col-sm-8">
                             <h2>{tableHeading}</h2>
                         </div>
-                        <div className="recordCount col-xs-4">
+                        <div className="recordCount col-sm-4">
                             {`Records: ${recordCount.toString().replace(/(.)(?=(\d{3})+$)/g,'$1,')}`}
                         </div>
                     </div>
@@ -26,10 +26,10 @@ const Container = ({ pagination, createPagelist, headers, filteredData, pageSize
                                     userfilters={userfilters} arrangement={arrangement} recordCount={recordCount} 
                                     datafn={data} serversidePagination={serversidePagination} progress={progress}
                                     showbtn={showbtn} moveProgressBar={moveProgressBar} progmessage={progmessage}/>:
-                    <div className="col-xs-3"></div>}
+                    <div className="col-sm-3"></div>}
                 
 
-                <div className="col-xs-3">
+                <div className="col-sm-3">
                     {pagination && 
                     <div>
                         <span className="pagesize-label">Per Page</span>
