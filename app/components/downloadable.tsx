@@ -38,7 +38,7 @@ const Downloadable = ({headers, filteredData, downloadableConfig, arrangement, d
     };
 
     return(
-        <div className="col-xs-3 download-file btn-group" role="group" aria-label="report">
+        <div className="col-sm-3 download-file btn-group" role="group" aria-label="report">
             {showbtn ? downloadableConfig.reportOption.map((option:any, index:number) => (
                     ((typeof downloadableConfig.reportfn === 'string' || 
                         downloadableConfig.reportfn instanceof String) && 

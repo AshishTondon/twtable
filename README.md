@@ -93,6 +93,12 @@ const data = [{"name":"Ashish", "job":"SoftWare Engineer", "department":"MB", "t
 {"name":"Shashi","job":"Home Maker","department":"Data2C", "team":7, "empId":4},
 {"name":"Kanika","job":"Business","department":"Data2C", "team":9, "empId":5}];
 ```
+
+<h3>Client side Paging Example</h3> 
+<a href="https://codesandbox.io/s/twtable-clientside-paging-example-1mhgm?fontsize=14&hidenavigation=1&theme=dark">
+  <img alt="Edit twtable-clientside-paging-example" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+</a>
+
 </li>
 </ul>
 </li>
@@ -245,6 +251,9 @@ Website Link: https://ashishtondon.github.io/twtable-serversidepaging-demo/
 
 Source Code: https://github.com/AshishTondon/twtable-serversidepaging-demo
 
+<a href="https://codesandbox.io/s/eloquent-snow-5o0y7?fontsize=14&hidenavigation=1&theme=dark">
+  <img alt="Edit 5o0y7" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+</a>
 
 
 ## To Do List
