@@ -2,7 +2,7 @@ import React from "react";
 import CSV from "../downloadable/csv";
 import Excel from "../downloadable/excel";
 
-const Downloadable = ({
+const Downloadable:React.FC<any> = ({
   headers,
   filteredData,
   downloadableConfig,
