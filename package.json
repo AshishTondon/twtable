@@ -15,7 +15,7 @@
     "build": "tsc && git add . && git commit -m",
     "postbuild": "git pull && git push",
     "tsc": "tsc && yarn copy-files",
-    "copy-files": "cp -rR ./app/assets/ ./dist/",
+    "copy-files": "rm -R ./dist/ && cp -R ./app/assets/ ./dist/",
     "prepare": "husky install",
     "pre-commit": "concurrently \"echo \"\"Stay relax Husky on Work!!\"\" \" \"prettier --write ./app/ && git add -A .\""
   },
