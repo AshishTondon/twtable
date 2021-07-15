@@ -1,29 +1,30 @@
-.tablefooter{
-    padding: 0.5em;
-    text-align: center;
+.tablefooter {
+  padding: 0.5em;
+  text-align: center;
 }
 
-input[type=text], input[type=password]{
-    padding:0;
+input[type="text"],
+input[type="password"] {
+  padding: 0;
 }
 
-.download-file{
-    float: right;
+.download-file {
+  float: right;
 }
 
-.download-file button{
-    font-size: 2em;
+.download-file button {
+  font-size: 2em;
 }
 
-.page-length{
-    padding: 10px;
-    margin: 7px;
+.page-length {
+  padding: 10px;
+  margin: 7px;
 }
 
-.downloadBtn{
-    font-size: 1em !important;
+.downloadBtn {
+  font-size: 1em !important;
 }
 
-.ordersign{
-    margin: 0 5px;
+.ordersign {
+  margin: 0 5px;
 }
