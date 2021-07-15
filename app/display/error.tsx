@@ -1,6 +1,6 @@
 import React from "react";
 
-const Error:React.FC<any> = ({ errorMessage }: any) => {
+const Error: React.FC<any> = ({ errorMessage }: any) => {
   return (
     <div className="row">
       <h3>{errorMessage}</h3>

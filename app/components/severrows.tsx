@@ -1,7 +1,7 @@
 import React from "react";
 import { IN_TWTableDataRow } from "../interface";
 
-const TWTableDataRow:React.FC<IN_TWTableDataRow> = ({
+const TWTableDataRow: React.FC<IN_TWTableDataRow> = ({
   filteredData,
   headers,
   startRow,

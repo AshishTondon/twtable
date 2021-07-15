@@ -3,7 +3,7 @@ import { IN_headers } from "../interface";
 
 window.navigator.msSaveBlob = () => true;
 
-const Excel:any = (event: any, headers: IN_headers[], filteredData: any[]) => {
+const Excel: any = (event: any, headers: IN_headers[], filteredData: any[]) => {
   event.persist();
   let table = "";
 

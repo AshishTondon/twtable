@@ -17,15 +17,9 @@
     "dev": "ts-node ./app/index.ts",
     "tsc": "tsc && yarn copy-files",
     "copy-files": "cp -rR ./app/assets/ ./dist/",
-    "format": "prettier --write ./app/"
-  },
-  "husky": {
-    "hooks": {
-      "applypatch-msg": "echo \"[Husky] applypatch-msg\"",
-      "pre-applypatch": "echo \"[Husky] pre-applypatch\"",
-      "post-applypatch": "echo \"[Husky] post-applypatch\"",
-      "pre-commit": "concurrently \"echo \"husky pre-commit\" \" \"prettier --write . && git add -A .\""
-    }
+    "format": "prettier --write ./app/",
+    "prepare": "husky install",
+    "pre-commit": "concurrently \"echo \"\"husky pre-commit\"\" \" \"prettier --write ./app/ && git add -A .\""
   },
   "publishConfig": {
     "access": "public"

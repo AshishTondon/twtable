@@ -2,7 +2,7 @@ import React from "react";
 import Paging from "./page";
 import Downloadable from "./downloadable";
 
-const Container:React.FC<any> = ({
+const Container: React.FC<any> = ({
   pagination,
   createPagelist,
   headers,

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Filter:React.FC<any> = ({ filter, headers, filterData }: any) => {
+const Filter: React.FC<any> = ({ filter, headers, filterData }: any) => {
   return (
     <React.Fragment>
       {filter && (

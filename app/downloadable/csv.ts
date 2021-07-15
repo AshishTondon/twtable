@@ -1,7 +1,7 @@
 import React from "react";
 import { IN_headers } from "../interface";
 
-const CSV:any = (event: any, headers: IN_headers[], filteredData: any[]) => {
+const CSV: any = (event: any, headers: IN_headers[], filteredData: any[]) => {
   event.persist();
   let table = "";
 
