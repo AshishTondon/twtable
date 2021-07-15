@@ -14,7 +14,6 @@
     "test": "concurrently --kill-others \"npm run test:lint\" \" npm run test:unit\" ",
     "build": "tsc && git add . && git commit -m",
     "postbuild": "git pull && git push",
-    "dev": "ts-node ./app/index.ts",
     "tsc": "tsc && yarn copy-files",
     "copy-files": "cp -rR ./app/assets/ ./dist/",
     "prepare": "husky install",
