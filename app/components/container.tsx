@@ -25,7 +25,7 @@ const Container: React.FC<any> = ({
   showbtn,
   moveProgressBar,
 }: any) => {
-  console.log("styleClass", styleClass);
+  //console.log("styleClass", styleClass);
   return (
     <div className={`table-container ${styleClass.tableContainer}`}>
       <div className="table-header">

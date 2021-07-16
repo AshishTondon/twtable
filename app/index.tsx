@@ -78,14 +78,28 @@ class TWTable extends React.Component<IN_config, any> {
 
     this.changePageSize = this.changePageSize.bind(this);
     this.moveProgressBar = this.moveProgressBar.bind(this);
+
+    this.refeshpagecount();
   }
 
   async UNSAFE_componentWillMount(): Promise<void> {
     await this.validateProprty();
   }
 
-  UNSAFE_componentDidMount(): void {
-    this.refeshpagecount();
+  UNSAFE_componentWillReceiveProps(props: IN_config) {
+    if (
+      !Object.prototype.hasOwnProperty.call(
+        this.props,
+        "serversidePagination"
+      ) ||
+      !this.props.serversidePagination
+    ) {
+      const data = props.data;
+      const filteredData = props.data;
+      const recordCount = filteredData.length;
+
+      this.setState({ data, filteredData, recordCount });
+    }
   }
 
   isFunction: any = (functionToCheck: any) => {
@@ -307,6 +321,9 @@ class TWTable extends React.Component<IN_config, any> {
     return buttonlist;
   };
 
+  /*
+   * This is function is used to rearranging columns
+   */
   rearrangerow: any = async (event: any, column: string, order: string) => {
     const { filteredData, serversidePagination } = this.state;
     let { headers } = this.state;
