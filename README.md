@@ -1,7 +1,9 @@
 # twtable
+
 Reactjs table module
 
 ### Why to use twtable module ?
+
 <ul>
 <li>
 Client-side Pagination
@@ -21,6 +23,7 @@ support custom styling
 </ul>
 
 ### Steps to configure twtable in project
+
 <ul>
 <li>
 Import twtable in project repository
@@ -28,13 +31,22 @@ Import twtable in project repository
 ```javascript
 import TWTable from "@twister19/twtable";
 ```
+
 </li>
 <li>
 Adding table view
 
 ```html
-<TWTable headers={headers} data={data} filter={true} pagination={true} pageSize={4} heading="Demo Table"/>
+<TWTable
+  headers="{headers}"
+  data="{data}"
+  filter="{true}"
+  pagination="{true}"
+  pageSize="{4}"
+  heading="Demo Table"
+/>
 ```
+
 </li>
 <li>
 headers and data are only two required attributes. In headers attribute twtable requires header struture if the table and data attribute is used for data set input.
@@ -52,6 +64,7 @@ const headers = [{"column": "name","displayname": "Name", "display": true},
 ```
 
 **Headers attributes**
+
 <table border=1 width=100% style="margin:10px 0;">
 <tr>
 <th width="20%">Attribute</th>
@@ -76,9 +89,10 @@ const headers = [{"column": "name","displayname": "Name", "display": true},
 <tr>
 <td>button</td>
 <td>false</td>
-<td>This attribute should be added for button or link column. 
+<td>This attribute should be added for button or link column.
 
-*NOTE: There can be multiple button type columns in a table*
+_NOTE: There can be multiple button type columns in a table_
+
 </td>
 </tr>
 </table>
@@ -87,7 +101,7 @@ const headers = [{"column": "name","displayname": "Name", "display": true},
 <li>
 
 ```json
-const data = [{"name":"Ashish", "job":"SoftWare Engineer", "department":"MB", "team":3, "empId":1}, 
+const data = [{"name":"Ashish", "job":"SoftWare Engineer", "department":"MB", "team":3, "empId":1},
 {"name":"Nishant","job":"Business","department":"Data2C", "team":4, "empId":2},
 {"name":"Mukesh","job":"Banker","department":"Data2C", "team":5, "empId":3},
 {"name":"Shashi","job":"Home Maker","department":"Data2C", "team":7, "empId":4},
@@ -217,36 +231,50 @@ Array, Array of type of report you want to have download options. Defulat value 
 ## Server Side Pagination
 
 ### Twtable tag
+
 ```html
-<TWTable headers={headers} data={getdata} filter={true} pagination={true} pageSize={4} heading="Demo Table" serversidePagination={true}/>
+<TWTable
+  headers="{headers}"
+  data="{getdata}"
+  filter="{true}"
+  pagination="{true}"
+  pageSize="{4}"
+  heading="Demo Table"
+  serversidePagination="{true}"
+/>
 ```
 
 'data' will be a function
 
 ```javascript
-    const getdata = async(twtrequest) =>{
+const getdata = async (twtrequest) => {
+  var data = await axios.post(
+    "http://yourwebsite.com/api/employee/info",
+    twtrequest
+  );
 
-    var data = await axios.post("http://yourwebsite.com/api/employee/info",twtrequest);
+  var res = {
+    data: data.data.empdata, // Data type Array
+    recordCount: 40, // Total record count
+  };
 
-    var res = {
-      data: data.data.empdata, // Data type Array
-      recordCount: 40   // Total record count
-    }
-
-    return(res);
-  }
+  return res;
+};
 ```
+
 'twtrequest' Strucure
+
 ```json
 {
-    "pageSize": 10, 
-    "currentpage": 1,  // For fist page currentpage will be 0
-    "userfilters": {"name":"Ashish", "designation":"developer"},
-    "arrangement": {"column":"name", "order":"asc"}
+  "pageSize": 10,
+  "currentpage": 1, // For fist page currentpage will be 0
+  "userfilters": { "name": "Ashish", "designation": "developer" },
+  "arrangement": { "column": "name", "order": "asc" }
 }
 ```
 
 ## Sever-side pagination example
+
 Website Link: https://ashishtondon.github.io/twtable-serversidepaging-demo/
 
 Source Code: https://github.com/AshishTondon/twtable-serversidepaging-demo
@@ -255,8 +283,8 @@ Source Code: https://github.com/AshishTondon/twtable-serversidepaging-demo
   <img alt="Edit 5o0y7" src="https://codesandbox.io/static/img/play-codesandbox.svg">
 </a>
 
-
 ## To Do List
+
 <table border=1 width=100%>
 <tr>
 <th>
