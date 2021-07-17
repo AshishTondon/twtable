@@ -88,7 +88,7 @@ const Table: React.FC<any> = ({
                       {typeof header.column === "string" &&
                       Object.prototype.hasOwnProperty.call(header, "ordersign")
                         ? header.ordersign
-                        : ""}
+                        : "↕"}
                     </span>
                   </th>
                 )
